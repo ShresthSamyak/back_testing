@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "human-instinct-backtester"
+version = "0.1.0"
+description = "Illustrative covered-call (spread) income backtesting engine (Phase 1 MVP)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "yfinance>=0.2",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.4"]
+
+[project.scripts]
+human-instinct-backtest = "backtester.__main__:main"
+
+[tool.setuptools]
+packages = ["backtester"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
