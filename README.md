@@ -1,23 +1,23 @@
 # Human Instinct Covered-Call Income Backtester
 
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)
+![Python Version](https://img.shields.io/badge/python-3.11%2B-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Status](https://img.shields.io/badge/status-Phase%201%20MVP-orange.svg)
 
 A clean, modular, **offline-capable** backtest of a monthly covered-call *spread* overlay on a single underlying (default **QQQ**). Modeled after NEOS-style QQQI / SPYI income funds.
 
-> **⚠️ ILLUSTRATIVE, NOT VALIDATION**
+> **ILLUSTRATIVE, NOT VALIDATION**
 > This Phase-1 engine prices options with **Black-Scholes using trailing realized volatility plus a flat implied-vol premium** as a stand-in for true implied volatility. **No real option prices are used.** The equity curves are *directional intuition*, **not** a verified track record.
 >
-> A real backtest requires **historical OPTION prices** (e.g., ORATS / Theta Data). The code is structured so a `HistoricalOptionPricer` drops in behind the same interface **without touching `strategy.py` or `engine.py`** (see [Plugging in real option data](#-phase-2-real-option-data)).
+> A real backtest requires **historical OPTION prices** (e.g., ORATS / Theta Data). The code is structured so a `HistoricalOptionPricer` drops in behind the same interface **without touching `strategy.py` or `engine.py`** (see [Phase 2: Real Option Data](#phase-2-real-option-data)).
 
 ---
 
-## 📖 What it does
+## What It Does
 
 Each calendar month, on the last trading day, the engine performs the following:
 
-1. Estimates **volatility**: Uses trailing realized vol (default 21-day, annualized) **+ `iv_premium`** (default `0.03` vol points) to proxy the volatility risk premium implied vol systematically trades richer than realized.
+1. Estimates **volatility**: trailing realized vol (default 21-day, annualized) **+ `iv_premium`** (default `0.03` vol points), proxying the volatility risk premium — implied vol systematically trades richer than realized.
 2. Picks a **short call strike** by target delta (default `0.30`) and, if `use_spread` is active, a **long call strike** by target delta (default `0.10`), via Black-Scholes **delta -> strike inversion**.
 3. Collects **net premium** (short - long), priced with Black-Scholes at entry.
 4. Holds the underlying in full; the overlay is written on **`coverage`** (default `0.75`) of the book.
@@ -31,7 +31,7 @@ income yield (per cycle) = coverage * net_premium / S0   (summed per year)
 
 ---
 
-## 🚀 Install & Run
+## Install & Run
 
 Install dependencies (or use `pip install -e .[test]` if packaging is set up):
 ```bash
@@ -63,7 +63,7 @@ Run `python -m backtester --help` to see all available flags.
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 Settings live in [backtester/config.py](backtester/config.py) as a frozen `BacktestConfig` dataclass. Every field is exposed as a CLI flag.
 
@@ -94,7 +94,7 @@ write_outputs(result, out_dir="output")
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```text
 backtester/
@@ -113,7 +113,7 @@ The codebase relies on **narrow protocols** (`PriceProvider`, `OptionPricer`). [
 
 ---
 
-## 🔌 Phase 2: Real Option Data
+## Phase 2: Real Option Data
 
 To upgrade this illustrative model to use real historical option prices:
 
@@ -124,7 +124,7 @@ No changes to [strategy.py](backtester/strategy.py) or [engine.py](backtester/en
 
 ---
 
-## 🗺️ Extended Roadmap
+## Extended Roadmap
 
 Future enhancements to fully actualize a production math stack:
 
@@ -137,7 +137,7 @@ Future enhancements to fully actualize a production math stack:
 
 ---
 
-## 🧪 Testing
+## Testing
 
 Run the test suite using pytest (works offline thanks to `SyntheticGBMProvider`):
 ```bash
@@ -147,7 +147,7 @@ Covers Black-Scholes sanity checks, delta->strike round-trips, spread structure/
 
 ---
 
-## ⚠️ Limitations & Caveats
+## Limitations & Caveats
 
 - **Synthetic pricing:** Premiums come from a model, not a market. Over-simplifies term structure and real-world IV skew.
 - **Frictionless:** Assumes no transaction costs, slippage, early assignment, or liquidity limits.
