@@ -15,7 +15,7 @@ from .engine import BacktestResult  # noqa: E402
 from .metrics import PerformanceStats  # noqa: E402
 
 _DISCLAIMER = (
-    "ILLUSTRATIVE ONLY — options priced with realized vol + a flat IV premium, "
+    "ILLUSTRATIVE ONLY - options priced with realized vol + a flat IV premium, "
     "NOT real option quotes. Directional intuition, not a verified track record."
 )
 
@@ -40,13 +40,13 @@ def print_table(result: BacktestResult) -> None:
 
     print()
     print("=" * 64)
-    print(f" Human Instinct — covered-call backtest  ({cfg.ticker})")
-    print(f" {cfg.start} → {cfg.end}   |   data: {cfg.data_source}")
+    print(f" Human Instinct - covered-call backtest  ({cfg.ticker})")
+    print(f" {cfg.start} -> {cfg.end}   |   data: {cfg.data_source}")
     print("=" * 64)
     spread = (
-        f"spread short Δ{cfg.short_delta:.2f}/long Δ{cfg.long_delta:.2f}"
+        f"spread short d{cfg.short_delta:.2f}/long d{cfg.long_delta:.2f}"
         if cfg.use_spread
-        else f"covered call short Δ{cfg.short_delta:.2f}"
+        else f"covered call short d{cfg.short_delta:.2f}"
     )
     print(f" overlay: {spread}, coverage {cfg.coverage:.0%}")
     print("-" * 64)
@@ -67,7 +67,7 @@ def print_table(result: BacktestResult) -> None:
         b_val = (
             fmt(getattr(bh, attr))
             if attr != "avg_income_yield"
-            else "       —"  # buy & hold has no overlay income
+            else "       -"  # buy & hold has no overlay income
         )
         print(f"{label:<22}{s_val:>12}{b_val:>14}")
     print("-" * 64)
@@ -75,7 +75,7 @@ def print_table(result: BacktestResult) -> None:
         gain = result.benchmark_curve.iloc[-1] - 1.0
         print(
             f" benchmark overlay: {result.benchmark_label} "
-            f"(growth of $1 → {result.benchmark_curve.iloc[-1]:.3f}, "
+            f"(growth of $1 -> {result.benchmark_curve.iloc[-1]:.3f}, "
             f"{gain * 100:+.1f}%)"
         )
     print()
@@ -139,8 +139,8 @@ def write_outputs(
     print_table(result)
     chart = save_chart(result, out_dir / "equity_curve.png")
     csv = save_csv(result, out_dir / "monthly_results.csv")
-    print(f" chart → {chart}")
-    print(f" csv   → {csv}")
+    print(f" chart -> {chart}")
+    print(f" csv   -> {csv}")
     return chart, csv
 
 
